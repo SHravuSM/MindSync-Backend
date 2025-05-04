@@ -55,13 +55,40 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get all posts
+// // Get all posts
+// router.get("/", async (req, res) => {
+//   try {
+//     console.log(req.user);
+//     const posts = await Post.find().sort({
+//       createdAt: -1,
+//     });
+//     console.log(posts);
+//     res.json(posts);
+//   } catch (err) {
+//     res.status(500).json({ message: "Failed to get posts", error: err });
+//   }
+// });
+
+// Get all posts, sorted by number of likes and then by creation date
 router.get("/", async (req, res) => {
   try {
     console.log(req.user);
-    const posts = await Post.find().sort({
-      createdAt: -1,
-    });
+
+    // Aggregation pipeline to sort by number of likes and createdAt
+    const posts = await Post.aggregate([
+      {
+        $addFields: {
+          likesCount: { $size: "$likes" }, // Adds a new field 'likesCount' with the size of the likes array
+        },
+      },
+      {
+        $sort: {
+          likesCount: -1, // Sort by likes count in descending order
+          createdAt: -1, // If likes count is the same, sort by createdAt in descending order
+        },
+      },
+    ]);
+
     console.log(posts);
     res.json(posts);
   } catch (err) {
