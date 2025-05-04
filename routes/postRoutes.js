@@ -58,7 +58,24 @@ router.post("/", async (req, res) => {
 // Get all posts
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find().sort({ createdAt: -1 });
+    console.log(req.user);
+    const posts = await Post.find().sort({
+      createdAt: -1,
+    });
+    console.log(posts);
+    res.json(posts);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to get posts", error: err });
+  }
+});
+
+router.get("/me", async (req, res) => {
+  try {
+    console.log(req.user);
+    const posts = await Post.find({ "user.email": req.user.email }).sort({
+      createdAt: -1,
+    });
+    console.log(posts);
     res.json(posts);
   } catch (err) {
     res.status(500).json({ message: "Failed to get posts", error: err });

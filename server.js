@@ -24,7 +24,7 @@ admin.initializeApp({
 // MongoDB connection
 mongoose
   .connect(process.env.MONGO_URI,{
-    dbName: "MindSync",
+    // dbName: "MindSync",
   })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
