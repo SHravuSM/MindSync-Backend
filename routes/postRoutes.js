@@ -92,7 +92,7 @@ router.get("/", async (req, res) => {
     console.log(posts);
     res.json(posts);
   } catch (err) {
-    res.status(500).json({ message: "Failed to get posts", error: err });
+    res.status(500).json({ message: "Failed to get post", error: err });
   }
 });
 
